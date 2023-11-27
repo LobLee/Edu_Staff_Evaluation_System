@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comfortaa', sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 0;
+    background: #95e1ff;
+    width: 1200px;
+}
+
+.navigation {
+    background-color: #0c75de;
+    color: #ecf0f1;
+    height: 100vh;
+    transition: 0.5s;
+    overflow-y: auto;
+    position: fixed;
+    width: 300px;
+}
+
+.toggle {
+    cursor: pointer;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 15px;
+    font-size: 30px;
+    height: auto;
+    margin-top: -20px;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navigation li {
+    margin-bottom: 20px;
+}
+
+.navigation .icon {
+    margin-right: 10px;
+}
+
+.navigation.active {
+    width: 80px;
+}
+
+.main {
+    padding: 0;
+    transition: 0.5s;
+    width:1000px ;
+}
+
+.topbar {
+    padding: 10px;
+    color: #1e61f2ee;
+    display: flex; 
+    
+    
+    
+}
+
+.toggle {
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .navigation {
+        width: 100%;
+        position: relative;
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+        position: relative;
+    }
+}

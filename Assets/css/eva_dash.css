@@ -1,0 +1,27 @@
+body {
+    font-family: 'Comfortaa', sans-serif;
+    margin: 0;
+    padding: 0;  
+   
+    }
+    .dashboard { 
+        display: flex;
+        justify-tracks: space-around;
+        padding: 20px;
+        margin-top: 0;
+        margin-left: 350px;
+        
+    }
+    
+    .box {
+    border:1px solid;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 0;
+    text-align: center;
+    width: 200px;
+    border-radius: 15px;
+    cursor: pointer;
+    
+    }
+   
