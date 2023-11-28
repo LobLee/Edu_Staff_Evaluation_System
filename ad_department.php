@@ -115,7 +115,8 @@ $departments = $department->getDepartments();
             <!-- Add New Button -->
             <button class="btn btn-primary custom-button" data-toggle="modal" data-target="#addDepartmentModal">Add New</button>
            <!-- Search Bar -->
-            <input type="text" class="custom-input form-search" placeholder="Search..." aria-label="Search">
+           <input type="text" class="form-control search-bar" placeholder="Search..." aria-label="Search">
+
 
             <div class="toast" id="deleteSuccessToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
                 <div class="toast-header">
@@ -211,6 +212,9 @@ $departments = $department->getDepartments();
             <td colspan="3">No departments found.</td>
         </tr>
     <?php endif; ?>
+    <div id="noResultsMessage" class="alert text-center" style="display: none;">No results found</div>
+
+
 
     <!-- Add Department Modal -->
     <div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
@@ -281,6 +285,30 @@ $departments = $department->getDepartments();
     });
    
 </script>
+<script>
+    $(document).ready(function () {
+        // Function to filter table rows based on the search input
+        $(".search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            var rows = $("table tbody tr");
+            
+            rows.hide();
+            
+            rows.filter(function () {
+                return $(this).text().toLowerCase().indexOf(value) > -1;
+            }).show();
+            
+            // Show a message when no results are found
+            var noResultsMessage = $("#noResultsMessage");
+            if (rows.filter(":visible").length === 0) {
+                noResultsMessage.show();
+            } else {
+                noResultsMessage.hide();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
 
