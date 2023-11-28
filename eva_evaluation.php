@@ -204,20 +204,22 @@ $evaluations = $evaluation->getEvaluations();
                             </td>
                         </tr>
 
-                        
-                        <!-- View -->
+                        <!-- View Evaluation Modal -->
                         <div class="modal fade" id="viewEvaluationModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="viewEvaluationModalLabel<?= $index ?>" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="viewEvaluationModalLabel<?= $index ?>">View Evaluation</h5>
+                                        <h5 class="modal-title" id="viewEvaluationModalLabel<?= $index ?>">View Evaluation Details</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Add content to display evaluation details here -->
-                                        View details for Evaluation #<?= $index + 1 ?>
+                                        <!-- Display evaluation details here -->
+                                        <p><strong>Task:</strong> <?= $evaluation['task_name'] ?></p>
+                                        <p><strong>Name:</strong> <?= $evaluation['name'] ?></p>
+                                        <p><strong>Evaluator:</strong> <?= $evaluation['evaluator'] ?></p>
+                                        <p><strong>Performance Average:</strong> <?= $evaluation['performance_average'] ?></p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
