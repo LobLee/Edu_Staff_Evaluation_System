@@ -13,8 +13,6 @@ body {
 
 .container-fluid {
     padding: 0;
-    background: #95e1ff;
-    width: 1200px;
 }
 
 .navigation {
@@ -59,16 +57,21 @@ body {
 .main {
     padding: 0;
     transition: 0.5s;
-    width:1000px ;
+    
+}
+.drop{
+    margin-left: 350px;
 }
 
 .topbar {
     padding: 10px;
     color: #1e61f2ee;
-    display: flex; 
-    
-    
-    
+    display:flex;
+    background: #95caff;
+    text-align: center;    
+}
+.h2{
+    margin-left: 400px;
 }
 
 .toggle {

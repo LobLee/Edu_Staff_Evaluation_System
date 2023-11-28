@@ -28,13 +28,7 @@
                         <span class="title">EduStaff <br> Evaluation System</span>
                     
                 </li>
-                <li>
-                    <a href="ad_profile.php">
-                    <ion-icon name="person-circle-outline"></ion-icon>
-                        <span class="title">Profile</span>
-                        
-                    </a>
-                </li>
+                
                 <li>
                     <a href="admin.php">
                         <span class="icon"><i class="las la-desktop"></i></span>
@@ -74,36 +68,14 @@
                         <span class="title">Departments</span>
                     </a>
                 </li>
-                <li>
-                    <a href="index.php">
-                        <span class="icon"><i class="las la-sign-out-alt"></i></span>
-                        <span class="title">Sign-out</span>
-                    </a>
-                </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="col-md-9">
-                <div class="main">
-                    <div class="topbar">
-                        <h2>Edu Staff Evaluation System</h2>
-                    </div>
-                    <!-- ... your main content ... -->
-                </div>
+                </ul>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS and Ionicons -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
+    <?php include("Include/manage_account.php");?>
     <script>
-        // Menu Toggle
-        let toggle = document.querySelector('.toggle');
+         // Menu Toggle
+         let toggle = document.querySelector('.toggle');
         let navigation = document.querySelector('.navigation');
         let main = document.querySelector('.main');
 

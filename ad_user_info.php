@@ -1,46 +1,47 @@
 <?php
 include("connection.php");
 
-class Staff {
+class User {
     private $conn;
 
     public function __construct($conn) {
         $this->conn = $conn;
     }
 
-    public function getStaffList() {
-        $query = "SELECT * FROM ad_staff";
+    public function getUserList() {
+        $query = "SELECT * FROM users";
         $result = $this->conn->query($query);
 
         if ($result->num_rows > 0) {
-            $staffList = [];
+            $userList = [];
             while ($row = $result->fetch_assoc()) {
-                $staffList[] = $row;
+                $userList[] = $row;
             }
-            return $staffList;
+            return $userList;
         } else {
             return [];
         }
     }
 
-    public function addStaff($first_name, $middle_name, $last_name, $email, $department, $evaluator) {
+    public function addUser( $avatar, $first_name, $middle_name, $last_name, $email, $role, $password ) {
+        $avatar = $this->conn->real_escape_string( $avatar);
         $first_name = $this->conn->real_escape_string($first_name);
         $middle_name = $this->conn->real_escape_string($middle_name);
         $last_name = $this->conn->real_escape_string($last_name);
         $email = $this->conn->real_escape_string($email);
-        $department = $this->conn->real_escape_string($department);
-        $evaluator = $this->conn->real_escape_string($evaluator);
-    
-        $query = "INSERT INTO ad_staff(first_name, middle_name, last_name, email, department, evaluator) 
-                  VALUES ('$first_name', '$middle_name', '$last_name', '$email', '$department', '$evaluator')";
+        $role = $this->conn->real_escape_string($role);
+        $password = $this->conn->real_escape_string($password);
+        
+        $query = "INSERT INTO users (avatar, first_name, middle_name, last_name, email, role, password) 
+                  VALUES ('$avatar', '$first_name', '$middle_name', '$last_name', '$email', '$role','$password')";
         $result = $this->conn->query($query);
     
         return $result;
     }
 
-    public function getStaffDetails($staffId) {
-        $staffId = $this->conn->real_escape_string($staffId);
-        $query = "SELECT * FROM ad_staff WHERE id = $staffId";
+    public function getUserDetails($userId) {
+        $userId = $this->conn->real_escape_string($userId);
+        $query = "SELECT * FROM users WHERE id = $userId";
         $result = $this->conn->query($query);
 
         if ($result->num_rows > 0) {
@@ -50,15 +51,16 @@ class Staff {
         }
     }
 
-    public function deleteStaff($staffId) {
-        $staffId = $this->conn->real_escape_string($staffId);
-        $query = "DELETE FROM ad_staff WHERE id = $staffId";
+    public function deleteUser($userId) {
+        $userId = $this->conn->real_escape_string($userId);
+        $query = "DELETE FROM users WHERE id = $userId";
         $result = $this->conn->query($query);
 
         return $result;
     }
-    public function editStaff($staffId, $newValues) {
-        $staffId = $this->conn->real_escape_string($staffId);
+
+    public function editUser($userId, $newValues) {
+        $userId = $this->conn->real_escape_string($userId);
     
         // Construct the SET part of the SQL query
         $setValues = [];
@@ -67,14 +69,14 @@ class Staff {
         }
         $setClause = implode(', ', $setValues);
     
-        $query = "UPDATE ad_staff SET $setClause WHERE id = $staffId";
+        $query = "UPDATE users SET $setClause WHERE id = $userId";
         $result = $this->conn->query($query);
     
         return $result;
     }
 }
 
-$staff = new Staff($conn);
+$user = new User($conn);
 // Check if the form is submitted for editing
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     // Form submitted for editing staff
@@ -83,64 +85,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     $editMiddleName = isset($_POST['edit_middle_name']) ? $_POST['edit_middle_name'] : '';
     $editLastName = isset($_POST['edit_last_name']) ? $_POST['edit_last_name'] : '';
     $editEmail = isset($_POST['edit_email']) ? $_POST['edit_email'] : '';
-    $editDepartment = isset($_POST['edit_department']) ? $_POST['edit_department'] : '';
-    $editEvaluator = isset($_POST['edit_evaluator']) ? $_POST['edit_evaluator'] : '';
+    $editPassword = isset($_POST['edit_password']) ? $_POST['edit_password'] : '';
+    $editAvatar = isset($_POST['edit_avatar']) ? $_POST['edit_avatar'] : '';
 
     // Call the editStaff method
-    $editResult = $staff->editStaff($editId, [
+    $editResult = $user->editUser($editId, [
         'first_name' => $editFirstName,
         'middle_name' => $editMiddleName,
         'last_name' => $editLastName,
         'email' => $editEmail,
-        'department' => $editDepartment,
-        'evaluator' => $editEvaluator,
+        'password' => $editPassword,
+        'avatar' => $editAvatar,
     ]);
 
     if ($editResult) {
         // Data edited successfully, redirect or show a success message
-        header("Location: ad_staff.php?success=1");
+        header("Location: ad_user_info.php?success=1");
         exit();
     } else {
         // Log the error for reference
-        error_log("Error editing staff: " . $conn->error);
+        error_log("Error editing  user: " . $conn->error);
         // Display a user-friendly message
-        $error_message = "Error editing staff. Please try again later.";
+        $error_message = "Error editing user. Please try again later.";
     }
 }
 
 // Check if the form is submitted for adding or deleting
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_staff'])) {
-    // Form submitted for adding staff
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
+    // Form submitted for adding user
+    $avatar = isset($_POST['avatar']) ? $_POST['avatar'] : '';
     $firstName = isset($_POST['first_name']) ? $_POST['first_name'] : '';
     $middleName = isset($_POST['middle_name']) ? $_POST['middle_name'] : '';
     $last_name = isset($_POST['last_name']) ? $_POST['last_name'] : '';
     $email = isset($_POST['email']) ? $_POST['email'] : '';
-    $department = isset($_POST['department']) ? $_POST['department'] : '';
-    $evaluator = isset($_POST['evaluator']) ? $_POST['evaluator'] : '';
+    $role = isset($_POST['role']) ? $_POST['role'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    // Call the addStaff method
-    $result = $staff->addStaff($firstName, $middleName, $last_name, $email, $department, $evaluator);
+   
+
+    // Call the addUser method
+    $result = $user->addUser($firstName, $middleName, $last_name, $email, $role,  $password);
 
     if ($result) {
         // Data added successfully, redirect or show a success message
-        header("Location: ad_staff.php?success=1");
+        header("Location: ad_user_info.php?success=1");
         exit();
     } else {
         // Log the error for reference
-        error_log("Error adding staff: " . $conn->error);
+        error_log("Error adding user: " . $conn->error);
         // Display a user-friendly message
-        $error_message = "Error adding staff. Please try again later.";
+        $error_message = "Error adding user. Please try again later.";
     }
 } elseif (isset($_POST['delete_id'])) {
     // Form submitted for deleting staff
     $deleteId = $_POST['delete_id'];
 
-    $deleteResult = $staff->deleteStaff($deleteId);
+    $deleteResult = $user->deleteUser($deleteId);
 
     if ($deleteResult) {
         // Use JavaScript to show the delete success toast
         // Data added successfully, redirect or show a success message
-        header("Location: ad_staff.php?success=1");
+        header("Location: ad_user_info.php?success=1");
         exit();
     } else {
         // Log the error for reference
@@ -150,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_staff'])) {
     }
 }
 
-$staffList = $staff->getStaffList();
+$userList = $user->getUserList();
 ?>
 
 
@@ -172,10 +177,10 @@ $staffList = $staff->getStaffList();
 <body>
         <div class="Container">
         <div class="header">
-        <header>Staff List</header>
+        <header>User List</header>
 
-        <!-- Add New Staff Button -->
-        <button class="btn btn-primary add-task-btn" data-toggle="modal" data-target="#addStaffModal">Add New Staff</button>
+        <!-- Add New User Button -->
+        <button class="btn btn-primary add-task-btn" data-toggle="modal" data-target="#addUserModal">Add New User</button>
 
         <!-- Search Bar -->
         <input type="text" placeholder="Search..." class="form-control search-bar">
@@ -190,81 +195,74 @@ $staffList = $staff->getStaffList();
         <th scope="col">Middle Name</th>
         <th scope="col">Last Name</th>
         <th scope="col">Email</th>
-        <th scope="col">Department</th>
-        <th scope="col">Evaluator</th>
+        <th scope="col">Role</th>
         <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <?php if (!empty($staffList)) : ?>
-        <?php foreach ($staffList as $index => $staff) : ?>
+        <?php if (!empty($userList)) : ?>
+        <?php foreach ($userList as $index => $user) : ?>
         <tr>
         <th scope="row"><?= $index + 1 ?></th>
-        <td><?= $staff['first_name'] ?? '' ?></td>
-        <td><?= $staff['middle_name'] ?? '' ?></td>
-        <td><?= $staff['last_name'] ?? '' ?></td>
-        <td><?= $staff['email'] ?></td>
-        <td><?= $staff['department'] ?></td>
-        <td><?= $staff['evaluator'] ?></td>       
-        
+        <td><?= $user['first_name'] ?? '' ?></td>
+        <td><?= $user['middle_name'] ?? '' ?></td>
+        <td><?= $user['last_name'] ?? '' ?></td>
+        <td><?= $user['email'] ?></td>     
+        <td><?= $user['role'] ?></td>    
         <td>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Actions
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewStaffModal<?= $index ?>">View Staff</a>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editStaffModal<?= $index ?>">Edit</a>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStaffModal<?= $index ?>">Delete</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewUserModal<?= $index ?>">View</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editUserModal<?= $index ?>">Edit</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteUserModal<?= $index ?>">Delete</a>
                 </div>
             </div>
         </td>
         </tr>
 
         <!-- Edit Staff Modal -->
-<div class="modal fade" id="editStaffModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="editStaffModalLabel<?= $index ?>" aria-hidden="true">
+<div class="modal fade" id="editUserModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel<?= $index ?>" aria-hidden="true">
     <!-- Modal Content Goes Here -->
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editStaffModalLabel<?= $index ?>">Edit Staff</h5>
+                <h5 class="modal-title" id="editUserModalLabel<?= $index ?>">Edit User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Your edit staff modal content goes here -->
-                <form id="editStaffForm<?= $index ?>" action="ad_staff.php" method="post">
-                    <input type="hidden" name="edit_id" value="<?= $staff['id'] ?>">
+                <form id="editUserForm<?= $index ?>" action="ad_user_info.php" method="post">
+                    <input type="hidden" name="edit_id" value="<?= $user['id'] ?>">
                     <div class="form-group">
                         <label for="edit_first_name">First Name:</label>
-                        <input type="text" class="form-control" name="edit_first_name" value="<?= $staff['first_name'] ?? '' ?>" required>
+                        <input type="text" class="form-control" name="edit_first_name" value="<?= $user['first_name'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="edit_middle_name">Middle Name:</label>
-                        <input type="text" class="form-control" name="edit_middle_name" value="<?= $staff['middle_name'] ?? '' ?>" required>
+                        <input type="text" class="form-control" name="edit_middle_name" value="<?= $user['middle_name'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="edit_last_name">Last Name:</label>
-                        <input type="text" class="form-control" name="edit_last_name" value="<?= $staff['last_name'] ?? '' ?>" required>
+                        <input type="text" class="form-control" name="edit_last_name" value="<?= $user['last_name'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="edit_email">Email:</label>
-                        <input type="email" class="form-control" name="edit_email" value="<?= $staff['email'] ?? '' ?>" required>
+                        <input type="email" class="form-control" name="edit_email" value="<?= $user['email'] ?? '' ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit_department">Department:</label>
-                        <input type="text" class="form-control" name="edit_department" value="<?= $staff['department'] ?? '' ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_evaluator">Evaluator:</label>
-                        <input type="text" class="form-control" name="edit_evaluator" value="<?= $staff['evaluator'] ?? '' ?>" required>
+                        <label for="edit_password">Password:</label>
+                        <input type="password" class="form-control" name="edit_password" value="<?= $user['password'] ?? '' ?>" >
                     </div>
                     <!-- Add more fields as needed for editing -->
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" form="editStaffForm<?= $index ?>" name="save_changes">Save Changes</button>
+                <button type="submit" class="btn btn-primary" form="editUserForm<?= $index ?>" name="save_changes">Save Changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -273,22 +271,22 @@ $staffList = $staff->getStaffList();
 
 
         <!-- Delete Staff Modal -->
-        <div class="modal fade" id="deleteStaffModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="deleteStaffModalLabel<?= $index ?>" aria-hidden="true">
+        <div class="modal fade" id="deleteUserModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel<?= $index ?>" aria-hidden="true">
         <!-- Modal Content Goes Here -->
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteStaffModalLabel<?= $index ?>">Delete Staff</h5>
+                    <h5 class="modal-title" id="deleteUserModalLabel<?= $index ?>">Delete User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete Staff #<?= $index + 1 ?>?
+                    Are you sure you want to delete User #<?= $index + 1 ?>?
                 </div>
                 <div class="modal-footer">
                     <form method="post">
-                        <input type="hidden" name="delete_id" value="<?= $staff['id'] ?>">
+                        <input type="hidden" name="delete_id" value="<?= $user['id'] ?>">
                         <button type="submit" class="btn btn-danger">Delete</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </form>
@@ -297,27 +295,25 @@ $staffList = $staff->getStaffList();
         </div>
         </div>
        <!-- View Staff Modal -->
-<div class="modal fade" id="viewStaffModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="viewStaffModalLabel<?= $index ?>" aria-hidden="true">
+<div class="modal fade" id="viewUserModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel<?= $index ?>" aria-hidden="true">
     <!-- Modal Content Goes Here -->
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewStaffModalLabel<?= $index ?>">View Staff</h5>
+                <h5 class="modal-title" id="viewUserModalLabel<?= $index ?>">View</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Display staff details here -->
+                <!-- Display user details here -->
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>First Name:</strong> <?= $staff['first_name'] ?? '' ?></p>
-                            <p><strong>Middle Name:</strong> <?= $staff['middle_name'] ?? '' ?></p>
-                            <p><strong>Last Name:</strong> <?= $staff['last_name'] ?? '' ?></p>
-                            <p><strong>Email:</strong> <?= $staff['email'] ?? '' ?></p>                       
-                            <p><strong>Department:</strong> <?= $staff['department'] ?? '' ?></p>
-                            <p><strong>Evaluator:</strong> <?= $staff['evaluator'] ?? '' ?></p>
+                            <p><strong>First Name:</strong> <?= $user['first_name'] ?? '' ?></p>
+                            <p><strong>Middle Name:</strong> <?= $user['middle_name'] ?? '' ?></p>
+                            <p><strong>Last Name:</strong> <?= $user['last_name'] ?? '' ?></p>
+                            <p><strong>Email:</strong> <?= $user['email'] ?? '' ?></p>                       
                             <!-- Add more details as needed -->
                     </div>
                 </div>
@@ -334,22 +330,22 @@ $staffList = $staff->getStaffList();
     </table>
     <?php else : ?>
     <tr>
-        <th colspan="6">No staff found</th>
+        <th colspan="6">No user found</th>
     </tr>
     <?php endif; ?>
-    <!-- Add New Staff Modal -->
-<div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+    <!-- Add New UserModal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addStaffModalLabel">Add New Staff</h5>
+                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Your staff form content goes here -->
-                <form id="addStaffForm" action="ad_staff.php" method="post" enctype="multipart/form-data">
+                <!-- Your userform content goes here -->
+                <form id="addUserForm" action="ad_user_info.php" method="post" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-avatar">
                             <label for="avatar">Avatar:</label>
@@ -374,22 +370,18 @@ $staffList = $staff->getStaffList();
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label for="department">Department:</label>
-                            <input type="text" class="form-control" name="department" required>
-                        </div>
-
-                                
-                        <div class="form-group col-md-6">
-                            <label for="evaluator">Evaluator:</label>
-                            <input type="text" class="form-control" name="evaluator" required>
-                        </div>
-                        <div class="form-group col-md-6">
                             <label for="email">Email:</label>
                             <input type="email" class="form-control" name="email" required>
-                        </div>                     
-                    
+                        </div>  
 
-                    
+                        <div class="form-group col-md-6">
+                            <label for="role">Role:</label>
+                            <select name="role" class="form-control" required>
+                                <option value="Admin" <?php echo ($user['role'] === 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                                <option value="Evaluator" <?php echo ($user['role'] === 'Evaluator') ? 'selected' : ''; ?>>Evaluator</option>
+                                <!-- Add other options as needed -->
+                            </select>                   
+                        </div> 
                         <div class="form-group col-md-6">
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" name="password" required>
@@ -400,9 +392,9 @@ $staffList = $staff->getStaffList();
                         </div>                       
                     </div>
                     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" name="add_staff">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-    </div>
+                        <button type="submit" class="btn btn-primary" name="add_user">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
                         
                 </form>
                     
@@ -421,8 +413,8 @@ $staffList = $staff->getStaffList();
     
     <script>
         // Reset the form when the modal is closed
-        $('#addStaffModal').on('hidden.bs.modal', function () {
-            $('#addStaffForm')[0].reset();
+        $('#addUserModal').on('hidden.bs.modal', function () {
+            $('#addUserForm')[0].reset();
         });
     </script>
     <script>

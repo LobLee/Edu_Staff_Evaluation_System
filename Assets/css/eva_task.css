@@ -12,7 +12,7 @@ body {
 }
 
 .Container {
-    margin-left: 300px;
+    margin-left: 10%;
     margin-top: 0;
   
 }
@@ -23,9 +23,9 @@ body {
 }
 
 .table {
-    margin-top: -5;
-    border-width: 10px;/* This should be 'border-width: 10px;' or another valid unit like 'em' or 'px' */
-    
+    margin-top: 10px;
+    border-width: 10px;
+    width: 1150px;   
 }
 
 .toggle.onclick {
@@ -41,6 +41,7 @@ body {
 th, td {
     text-align: center;
     font-size: small;
+    
  
 }
 .custom-button{
@@ -58,7 +59,7 @@ th, td {
     height: 40px;
     font-size:small;
     border-radius:5px;
-    margin-top: 0;
+    margin-top: -80px;
     margin-left: 750px;
    }
 
@@ -68,7 +69,7 @@ th, td {
     height: 30px;
     font-size:small;
     border-radius:5px;
-    margin-top: 0;
+    margin-top: -80px;
     margin-left: 680px;
    
 }
@@ -77,8 +78,8 @@ th, td {
     height: 30px;
     font-size:small;
     border-radius:5px;
-    margin-top: 0;
-    margin-left: 680px;
+    margin-top: -45px;
+    margin-left: 900px;
 }
 #successToast {
     position: fixed;
@@ -110,7 +111,7 @@ th, td {
     width:fit-content;
     font-size:small;
     border-radius:5px;
-    margin-top: 0;
+    margin-top: -85px;
     margin-left: 780px;
 }
 .modal-button{
