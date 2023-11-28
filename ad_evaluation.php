@@ -165,12 +165,12 @@ $evaluations = $evaluation->getEvaluations();
     <div class="header">
         <header>Evaluation List</header> 
             <!-- Add New Evaluation Button -->
-            <button class="primary" data-toggle="modal" data-target="#addEvaluationModal">Add New Evaluation</button>  
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addEvaluationModal">Add New Evaluation</button>
+
             <!-- Search Bar -->
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
-                
-            </div> 
+            <input type="text" class="form-control search-bar" placeholder="Search..." aria-label="Search">
+
+
         </div>
         
             <table class="table table-bordered">
@@ -366,6 +366,9 @@ $evaluations = $evaluation->getEvaluations();
                 <td colspan="4">No evaluations found.</td>
             </tr>
         <?php endif; ?>
+        <div id="noResultsMessage" class="alert text-center" style="display: none;">No results found</div>
+
+
         
    
     </div>
@@ -390,6 +393,30 @@ $evaluations = $evaluation->getEvaluations();
         }).toast('show');
     });
 </script>
+<script>
+    $(document).ready(function () {
+        // Function to filter table rows based on the search input
+        $(".search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            var rows = $("table tbody tr");
+            
+            rows.hide();
+            
+            rows.filter(function () {
+                return $(this).text().toLowerCase().indexOf(value) > -1;
+            }).show();
+            
+            // Show a message when no results are found
+            var noResultsMessage = $("#noResultsMessage");
+            if (rows.filter(":visible").length === 0) {
+                noResultsMessage.show();
+            } else {
+                noResultsMessage.hide();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
 
