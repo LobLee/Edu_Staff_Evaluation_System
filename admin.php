@@ -1,5 +1,50 @@
 <?php
-    include('connection.php'); ?>
+    include('connection.php'); 
+    // Function to get the count of profiles
+function getProfileCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM profile";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+function getTaskCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM eva_task";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+function getEvaluationCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM evaluations";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+function getStaffCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM ad_staff";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+function getUserCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM ad_staff";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+function getDepartmentCount($conn) {
+    $query = "SELECT COUNT(*) as count FROM eva_department";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    return $data['count'];
+}
+// Usage
+$profileCount = getProfileCount($conn);
+$taskCount = getTaskCount($conn);
+$evaluationCount = getEvaluationCount($conn);
+$staffCount = getStaffCount($conn);
+$userCount = getUserCount($conn);
+$departmentCount = getDepartmentCount($conn);
+?>
 
 
 <!doctype html>
@@ -24,65 +69,60 @@
     </div>
 <div class = "con1">
 
-    <div class = "box">
-        <a href = "ad_profile.php">
-            <div class = "title">
-                Profile
-            </div>
-            <div class = "icon">
-                <i class='bx bx-user icon'></i>
-            </div>
-            <div class = "description">
-                Click here! to proceed into Profile
-            </div>
-        </a>
-    </div>
+<div class="box">
+    <a href="ad_profile.php">
+        <div class="title"><i class='bx bx-user icon'></i>
+            Profile
+        </div>      
+        <div class="description">
+            Click here! to proceed into Profile
+        </div>
+        <div class="count">
+            Total Profiles: <?php echo $profileCount; ?>
+        </div>
+    </a>
+</div>
     
     <div class = "box">
         <a href = "ad_task.php">
-            <div class = "title">
+            <div class = "title"><ion-icon name="folder-open-outline"></ion-icon>
                Task
-            </div>
-            <div class = "icon">
-            <ion-icon name="folder-open-outline"></ion-icon>
             </div>
             <div class = "description">
                 Click here! to proceed into Task
             </div>
+            <div class="count">
+                Total Task: <?php echo $taskCount; ?>
+            </div>
         </a>
-    </div>
-    
-    
-   
+    </div> 
 </div>
 
-
 <div class = "con2">
-
     <div class = "box">
         <a href = "ad_evaluation.php">
-            <div class = "title">
+            <div class = "title"> <ion-icon name="list-outline"></ion-icon>
                 Evaluation
-            </div>
-            <div class = "icon">
-            <ion-icon name="list-outline"></ion-icon>
-            </div>
+            </div>           
             <div class = "description">
                 Click here! to proceed into Evaluation
+            </div>
+            <div class="count">
+                Total Evaluation: <?php echo $evaluationCount; ?>
             </div>
         </a>
     </div>
     
     <div class = "box">
         <a href ="ad_staff.php">
-            <div class = "title">
+            <div class = "title"> <ion-icon name="person-outline"></ion-icon>
                Staff
-            </div>
-            <div class = "icon">
-            <ion-icon name="person-outline"></ion-icon>
-            </div>
+            </div>         
             <div class = "description">
                 Click here! to proceed into Staff
+            </div>
+            <div class="count">
+                Total Staff: <?php echo $staffCount; ?>
             </div>
         </a>
     </div>
@@ -92,28 +132,28 @@
 
     <div class = "box">
         <a href = "ad_user_info.php">
-            <div class = "title">
+            <div class = "title"> <ion-icon name="person-circle-outline"></ion-icon>
                 User Info
-            </div>
-            <div class = "icon">
-            <ion-icon name="person-circle-outline"></ion-icon>
-            </div>
+            </div>          
             <div class = "description">
                 Click here! to proceed into User Info
+            </div>
+            <div class="count">
+                Total User: <?php echo $userCount; ?>
             </div>
         </a>
     </div>
     
     <div class = "box">
         <a href ="ad_department.php">
-            <div class = "title">
+            <div class = "title"> <ion-icon name="school-outline"></ion-icon>
                Departments
-            </div>
-            <div class = "icon">
-            <ion-icon name="school-outline"></ion-icon>
-            </div>
+            </div>         
             <div class = "description">
                 Click here! to proceed into Departments
+            </div>
+            <div class="count">
+                Total Department: <?php echo $departmentCount; ?>
             </div>
         </a>
     </div>
