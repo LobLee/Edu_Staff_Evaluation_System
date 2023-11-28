@@ -23,13 +23,19 @@ body {
 }
 
 .table {
+    margin-top: -5;
+    border-width: 10px;
     margin-top: 10px;
     border-width: 10px;
-    width: 1150px;   
+    width: 1150px;
+}
+#noResultsMessage {
+    text-align: center;
+    margin-top: 10px; 
 }
 
 .toggle.onclick {
-    position: relative; /* Assuming you want 'position: fixed;' for a fixed position toggle button */
+    position: relative; 
     height: 60px;
     width: 60px;
     margin-left: 250px;    
