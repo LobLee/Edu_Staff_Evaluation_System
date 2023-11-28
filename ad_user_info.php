@@ -337,6 +337,7 @@ $staffList = $staff->getStaffList();
         <th colspan="6">No staff found</th>
     </tr>
     <?php endif; ?>
+    <div id="noResultsMessage" style="display: none;">No results found</div>
     <!-- Add New Staff Modal -->
 <div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 800px;">
@@ -433,6 +434,30 @@ $staffList = $staff->getStaffList();
             }).toast('show');
         });
     </script>
+   <script>
+    $(document).ready(function () {
+        // Function to filter table rows based on the search input
+        $(".search-bar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            var rows = $("table tbody tr");
+            
+            rows.hide();
+            
+            rows.filter(function () {
+                return $(this).text().toLowerCase().indexOf(value) > -1;
+            }).show();
+            
+            // Show a message when no results are found
+            var noResultsMessage = $("#noResultsMessage");
+            if (rows.filter(":visible").length === 0) {
+                noResultsMessage.show();
+            } else {
+                noResultsMessage.hide();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
 
