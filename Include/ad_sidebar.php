@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,11 +69,34 @@
                         <span class="title">Departments</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="manage_account.php">
+                        <span class="icon"><i class="las la-cog"></i>
+                        <span class="title">Manage Account</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.php">
+                        <span class="icon"><i class="las la-sign-out-alt"></i></span>
+                        <span class="title">Logout</span>
+                    </a>
+                </li>
+
                 </ul>
             </div>
         </div>
     </div>
-    <?php include("Include/manage_account.php");?>
+    
+    <!-- Main Content -->
+   <div class="main">
+        <div class="topbar">
+            <div class="h2">
+                <h2>Edu Staff Evaluation System</h2>
+            </div>
+        </div>
+    </div>
     <script>
          // Menu Toggle
          let toggle = document.querySelector('.toggle');
