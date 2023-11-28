@@ -55,8 +55,52 @@ class Evaluation {
 
         return $result;
     }
+    public function editEvaluation($evaluationId, $newValues) {
+        $evaluationId = $this->conn->real_escape_string($evaluationId);
+        $evaluation = $this->getEvaluationDetails($evaluationId);
+    
+        if (!$evaluation) {
+            return false; 
+        }
+    
+        // Extracting new values
+        $newTask = isset($newValues['edit_task_name']) ? $this->conn->real_escape_string($newValues['edit_task_name']) : $evaluation['task_name'];
+        $newName = isset($newValues['edit_name']) ? $this->conn->real_escape_string($newValues['edit_name']) : $evaluation['name'];
+        $newEvaluator = isset($newValues['edit_evaluator']) ? $this->conn->real_escape_string($newValues['edit_evaluator']) : $evaluation['evaluator'];
+        $newPerformanceAverage = isset($newValues['edit_performance_average']) ? $this->conn->real_escape_string($newValues['edit_performance_average']) : $evaluation['performance_average'];
+    
+        // Update the task in the database
+        $query = "UPDATE evaluations SET task_name='$newTask', name='$newName', evaluator='$newEvaluator', performance_average='$newPerformanceAverage' WHERE id='$evaluationId'";
+        $result = $this->conn->query($query);
+    
+        return $result;
+    }
 }
-$evaluation = new Evaluation($conn);
+    
+$evaluation= new Evaluation($conn);
+    // Check if the form for editing a evaluations is submitted
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_evaluation_id'])) {
+        $editEvaluationId = $_POST['edit_evaluation_id'];
+    
+        // Get the new values from the form submission
+        $newValues = array(
+            'edit_task_name' => $_POST['edit_task_name'],
+            'edit_name' => $_POST['edit_name'],
+            'edit_evaluator' => $_POST['edit_evaluator'],
+            'edit_performance_average' => $_POST['edit_performance_average']
+        );
+    
+        $editResult = $evaluation->editEvaluation($editEvaluationId, $newValues);
+    
+        if ($editResult) {
+            // Use JavaScript to show the edit success toast
+            // Data edited successfully, redirect or show a success message
+            header("Location: ad_evaluation.php?success=2");
+            exit();
+        } else {
+            echo "Error editing evaluation: " . $conn->error;
+        }
+    }
 
 // Check if the form is submitted for adding or deleting
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_evaluation'])) {
@@ -127,18 +171,6 @@ $evaluations = $evaluation->getEvaluations();
                 <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
                 
             </div> 
-   
-        <div class="toast" id="deleteSuccessToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" style="position: absolute; top: 0; right: 0; margin: 10px;">
-                <div class="toast-header">
-                    <strong class="mr-auto">Success!</strong>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Evaluation deleted successfully.
-                </div>
-            </div>
         </div>
         
             <table class="table table-bordered">
@@ -200,49 +232,50 @@ $evaluations = $evaluation->getEvaluations();
                         </div>
 
                        <!-- Edit Evaluation Modal -->
-                        <div class="modal fade" id="editEvaluationModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="editEvaluationModalLabel<?= $index ?>" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editEvaluationModalLabel<?= $index ?>">Edit Evaluation Details</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Your evaluation edit form content goes here -->
-                                        <form action="ad_evaluation.php" method="post">
-                                            <input type="hidden" name="edit_id" value="<?= $evaluation['id'] ?>">
+                    <div class="modal fade" id="editEvaluationModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="editEvaluationModalLabel<?= $index ?>" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editEvaluationModalLabel<?= $index ?>">Edit Evaluation Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Your evaluation edit form content goes here -->
+                                    <form action="ad_evaluation.php" method="post">
+                                        <input type="hidden" name="edit_evaluation_id" value="<?= $evaluation['id'] ?>">
 
-                                            <div class="form-group">
-                                                <label for="task_name">Task:</label>
-                                                <input type="text" name="task_name" value="<?= $evaluation['task_name'] ?>" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="edit_task_name">Task:</label>
+                                            <input type="text" name="edit_task_name" value="<?= $evaluation['task_name'] ?>" required>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <label for="name">Name:</label>
-                                                <input type="text" name="name" value="<?= $evaluation['name'] ?>" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="edit_name">Name:</label>
+                                            <input type="text" name="edit_name" value="<?= $evaluation['name'] ?>" required>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <label for="evaluator">Evaluator:</label>
-                                                <input type="text" name="evaluator" value="<?= $evaluation['evaluator'] ?>" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="edit_evaluator">Evaluator:</label>
+                                            <input type="text" name="edit_evaluator" value="<?= $evaluation['evaluator'] ?>" required>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <label for="performance_average">Performance Average:</label>
-                                                <input type="number" name="performance_average" value="<?= $evaluation['performance_average'] ?>" required>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="edit_performance_average">Performance Average:</label>
+                                            <input type="number" name="edit_performance_average" value="<?= $evaluation['performance_average'] ?>" required>
+                                        </div>
 
-                                            <button type="submit" class="btn btn-primary" name="save_changes">Save Changes</button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
+                                        <button type="submit" class="btn btn-primary" name="save_changes">Save Changes</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
 
                       <!-- Delete Modal -->
                         <div class="modal fade" id="deleteEvaluationModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="deleteEvaluationModalLabel<?= $index ?>" aria-hidden="true">
