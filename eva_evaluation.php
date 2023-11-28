@@ -94,7 +94,7 @@ $evaluation= new Evaluation($conn);
         if ($editResult) {
             // Use JavaScript to show the edit success toast
             // Data edited successfully, redirect or show a success message
-            header("Location: ad_evaluation.php?success=2");
+            header("Location: eva_evaluation.php?success=2");
             exit();
         } else {
             echo "Error editing evaluation: " . $conn->error;
@@ -168,17 +168,6 @@ $evaluations = $evaluation->getEvaluations();
             <!-- Add New Evaluation Button -->
          <button class="add-evaluation-btn btn-primary" data-toggle="modal" data-target="#addEvaluationModal">Add New Evaluation</button>
 
-        <div class="toast" id="deleteSuccessToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
-                <div class="toast-header">
-                    <strong class="mr-auto">Success!</strong>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Evaluation deleted successfully.
-                </div>
-            </div>
         </div>
         
             <table class="table table-bordered">
@@ -215,20 +204,22 @@ $evaluations = $evaluation->getEvaluations();
                             </td>
                         </tr>
 
-                        
-                        <!-- View -->
+                        <!-- View Evaluation Modal -->
                         <div class="modal fade" id="viewEvaluationModal<?= $index ?>" tabindex="-1" role="dialog" aria-labelledby="viewEvaluationModalLabel<?= $index ?>" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="viewEvaluationModalLabel<?= $index ?>">View Evaluation</h5>
+                                        <h5 class="modal-title" id="viewEvaluationModalLabel<?= $index ?>">View Evaluation Details</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Add content to display evaluation details here -->
-                                        View details for Evaluation #<?= $index + 1 ?>
+                                        <!-- Display evaluation details here -->
+                                        <p><strong>Task:</strong> <?= $evaluation['task_name'] ?></p>
+                                        <p><strong>Name:</strong> <?= $evaluation['name'] ?></p>
+                                        <p><strong>Evaluator:</strong> <?= $evaluation['evaluator'] ?></p>
+                                        <p><strong>Performance Average:</strong> <?= $evaluation['performance_average'] ?></p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -250,7 +241,7 @@ $evaluations = $evaluation->getEvaluations();
                                 </div>
                                 <div class="modal-body">
                                     <!-- Your evaluation edit form content goes here -->
-                                    <form action="ad_evaluation.php" method="post">
+                                    <form action="eva_evaluation.php" method="post">
                                         <input type="hidden" name="edit_evaluation_id" value="<?= $evaluation['id'] ?>">
 
                                         <div class="form-group">
@@ -377,7 +368,7 @@ $evaluations = $evaluation->getEvaluations();
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
+<script>
     $(document).ready(function(){
         $('#deleteSuccessToast').toast({
             autohide: true,
