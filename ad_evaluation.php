@@ -297,7 +297,7 @@ $evaluations = $evaluation->getEvaluations();
                                 </div>
                                 <div class="modal-body">
                                     <!-- Your evaluation form content goes here -->
-                                    <form action="eva_evaluation.php" method="post">
+                                    <form action="ad_evaluation.php" method="post">
                                         <label for="task_name">Task:</label>
                                         <input type="text" name="task_name" required>
                                         <br><br>
