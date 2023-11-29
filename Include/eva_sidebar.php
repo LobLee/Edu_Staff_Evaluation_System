@@ -55,7 +55,14 @@
             </ul>
         </div>
     </div>
-    <?php include("Include/manage_account.php");?>
+     <!-- Main Content -->
+   <div class="main">
+        <div class="topbar">
+            <div class="h2">
+                <h2>Edu Staff Evaluation System</h2>
+            </div>
+        </div>
+    </div>
     <script>
         // Menu Toggle
         let toggle = document.querySelector('.toggle');

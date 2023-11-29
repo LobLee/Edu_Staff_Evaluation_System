@@ -45,14 +45,14 @@
 
                 <li>
                     <a href="ad_evaluation.php">
-                       <ion-icon name="person-outline"></ion-icon>
+                    <span class="icon"><i class="list-outline"></i></span>
                         <span class="title">Evaluation</span>
                     </a>
                 </li>
                 
                 <li>
                     <a href="ad_staff.php">
-                       <ion-icon name="person-outline"></ion-icon>
+                    <span class="icon"><i class ="person-outline"></i></span>
                         <span class="title">Staff</span>
                     </a>
                 </li>
