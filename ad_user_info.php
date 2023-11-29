@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
    
 
     // Call the addUser method
-    $result = $user->addUser($firstName, $middleName, $last_name, $email, $role,  $password);
+    $result = $user->addUser($avatar, $firstName, $middleName, $last_name, $email, $role,  $password);
 
     if ($result) {
         // Data added successfully, redirect or show a success message
@@ -335,8 +335,7 @@ $userList = $user->getUserList();
     <?php endif; ?>
 
     <div id="noResultsMessage" style="display: none;">No results found</div>
-    <!-- Add New Staff Modal -->
-<div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+
     <!-- Add New UserModal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
 
